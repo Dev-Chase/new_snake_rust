@@ -11,7 +11,7 @@ pub struct Cube {
 impl Cube {
     pub fn new(place: Vector2, colour: Color) -> Cube {
         Cube {
-            colour: colour,
+            colour,
             rect: rrect(place.x, place.y, TILE_SIZE, TILE_SIZE),
         }
     }
@@ -108,12 +108,12 @@ impl Snake {
     }
 
     pub fn is_dead(&self) -> bool {
-        // Out of Bounds Horizontally
-        if self.body[0].rect.x < 0f32 || self.body[0].rect.x > (W - TILE_SIZE) as f32 {
-            return true;
-        }
-        // Out of Bounds Vertically
-        else if self.body[0].rect.y < 0f32 || self.body[0].rect.y > (H - TILE_SIZE) as f32 {
+        // Out of Bounds
+        if self.body[0].rect.x < 0f32
+            || self.body[0].rect.x > (W - TILE_SIZE) as f32
+            || self.body[0].rect.y < 0f32
+            || self.body[0].rect.y > (H - TILE_SIZE) as f32
+        {
             return true;
         }
 

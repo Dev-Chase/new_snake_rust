@@ -11,7 +11,7 @@ const TILE_SIZE: i32 = 24;
 const MOVE_SPEED: f32 = 3f32;
 const W: i32 = TILE_SIZE * 22;
 const H: i32 = TILE_SIZE * 20;
-const FPS: u32 = 45u32;
+const FPS: u32 = 55u32;
 const TITLE_FONT_SIZE: i32 = 24;
 
 enum GameState {
@@ -31,8 +31,13 @@ fn main() {
     let mut game_state = GameState::Starting;
     let mut screen_shake = 0f32;
     let mut score = 0;
-    let mut highscore: i32 = fs::read_to_string("./data/highscore.txt").expect("Couldn't Open File").split("\n").last().expect("Weird Data in File").parse().expect("NaN in File");
-
+    let mut highscore: i32 = fs::read_to_string("./data/highscore.txt")
+        .expect("Couldn't Open File")
+        .split('\n')
+        .last()
+        .expect("Weird Data in File")
+        .parse()
+        .expect("NaN in File");
 
     let mut space_pressed: bool;
     let mut down_pressed: bool;
@@ -87,12 +92,11 @@ fn main() {
                         let mut data_file = fs::OpenOptions::new()
                             .append(true)
                             .open("./data/highscore.txt")
-                            .expect("cannot open file"
-                        );
+                            .expect("cannot open file");
 
                         // Saving to High Score File
                         data_file
-                            .write(format!("\n{}", highscore).as_bytes())
+                            .write_all(format!("\n{}", highscore).as_bytes())
                             .expect("Couldn't Save High Score");
                     }
                 }
@@ -110,12 +114,11 @@ fn main() {
                         let mut data_file = fs::OpenOptions::new()
                             .append(true)
                             .open("./data/highscore.txt")
-                            .expect("cannot open file"
-                        );
+                            .expect("cannot open file");
 
                         // Saving to High Score File
                         data_file
-                            .write(format!("\n{}", highscore).as_bytes())
+                            .write_all(format!("\n{}", highscore).as_bytes())
                             .expect("Couldn't Save High Score");
                     }
                 }
@@ -134,12 +137,11 @@ fn main() {
                         let mut data_file = fs::OpenOptions::new()
                             .append(true)
                             .open("./data/highscore.txt")
-                            .expect("cannot open file"
-                        );
+                            .expect("cannot open file");
 
                         // Saving to High Score File
                         data_file
-                            .write(format!("\n{}", highscore).as_bytes())
+                            .write_all(format!("\n{}", highscore).as_bytes())
                             .expect("Couldn't Save High Score");
                     }
                 }
@@ -197,7 +199,8 @@ fn main() {
                 );
                 d.draw_text(
                     format!("Score: {}", score).as_str(),
-                    W - measure_text(format!("Score: {}", score).as_str(), TITLE_FONT_SIZE - 3) - 8 + offs.0,
+                    W - measure_text(format!("Score: {}", score).as_str(), TITLE_FONT_SIZE - 3) - 8
+                        + offs.0,
                     8 + offs.1,
                     TITLE_FONT_SIZE - 3,
                     FG_COLOUR,
