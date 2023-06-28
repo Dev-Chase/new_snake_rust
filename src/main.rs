@@ -21,6 +21,27 @@ enum GameState {
     Paused,
 }
 
+pub struct KeyStates {
+    pub up: bool,
+    pub down: bool,
+    pub right: bool,
+    pub left: bool,
+    space: bool,
+}
+
+impl KeyStates {
+    fn new() -> KeyStates {
+        KeyStates {
+            up: false,
+            down: false,
+            right: false,
+            left: false,
+            space: false,
+        }
+    }
+}
+//TODO: Add Unit Struct for Key States
+
 fn main() {
     let (mut rl, thread) = raylib::init().size(W, H).title("Better Snake Rust").build();
     rl.set_target_fps(FPS);
@@ -39,27 +60,23 @@ fn main() {
         .parse()
         .expect("NaN in File");
 
-    let mut space_pressed: bool;
-    let mut down_pressed: bool;
-    let mut up_pressed: bool;
-    let mut left_pressed: bool;
-    let mut right_pressed: bool;
+    let mut key_states = KeyStates::new();
 
     let mut snake = Snake::new();
     let mut food = Cube::new(Vector2::new(0f32, 0f32), FOOD_COLOUR);
 
     while !rl.window_should_close() {
         // Get Input Info
-        space_pressed = rl.is_key_pressed(KeyboardKey::KEY_SPACE);
-        down_pressed = rl.is_key_down(KeyboardKey::KEY_DOWN);
-        up_pressed = rl.is_key_down(KeyboardKey::KEY_UP);
-        left_pressed = rl.is_key_down(KeyboardKey::KEY_LEFT);
-        right_pressed = rl.is_key_down(KeyboardKey::KEY_RIGHT);
+        key_states.space = rl.is_key_pressed(KeyboardKey::KEY_SPACE);
+        key_states.down = rl.is_key_down(KeyboardKey::KEY_DOWN);
+        key_states.up = rl.is_key_down(KeyboardKey::KEY_UP);
+        key_states.left = rl.is_key_down(KeyboardKey::KEY_LEFT);
+        key_states.right = rl.is_key_down(KeyboardKey::KEY_RIGHT);
 
         // Updating
         match game_state {
             GameState::Starting | GameState::GameOver => {
-                if space_pressed {
+                if key_states.space {
                     score = 0;
                     game_state = GameState::Playing;
                     snake = Snake::new();
@@ -71,7 +88,7 @@ fn main() {
             }
             GameState::Playing => {
                 // Updating the Snake
-                snake.update(left_pressed, right_pressed, up_pressed, down_pressed);
+                snake.update(&key_states);
                 // Food Collision Check
                 if snake.hit_food(&food) {
                     snake.grow();
@@ -102,7 +119,7 @@ fn main() {
                 }
 
                 // Pause Checks
-                if space_pressed {
+                if key_states.space {
                     game_state = GameState::Paused;
                     subtitle_text = "Game Paused";
                     current_main_text = "Press Space to Resume";
@@ -147,7 +164,7 @@ fn main() {
                 }
             }
             GameState::Paused => {
-                if space_pressed {
+                if key_states.space {
                     game_state = GameState::Playing;
                 }
             }

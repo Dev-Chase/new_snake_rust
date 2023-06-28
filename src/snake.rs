@@ -1,4 +1,4 @@
-use crate::{H, MOVE_SPEED, PLAYER_COLOUR, TILE_SIZE, W};
+use crate::{KeyStates, H, MOVE_SPEED, PLAYER_COLOUR, TILE_SIZE, W};
 use raylib::prelude::*;
 extern crate rand;
 use rand::Rng;
@@ -46,21 +46,21 @@ impl Snake {
         }
     }
 
-    pub fn update(&mut self, left: bool, right: bool, up: bool, down: bool) {
+    pub fn update(&mut self, keys: &KeyStates) {
         // Horizontal Movement Checks
-        if left && self.direction.0 == 0f32 {
+        if keys.left && self.direction.0 == 0f32 {
             self.desired_dir = (-1f32, 0f32);
             self.should_change = true;
-        } else if right && self.direction.0 == 0f32 {
+        } else if keys.right && self.direction.0 == 0f32 {
             self.desired_dir = (1f32, 0f32);
             self.should_change = true;
         }
 
         // Vertical Movement Checks
-        if up && self.direction.1 == 0f32 {
+        if keys.up && self.direction.1 == 0f32 {
             self.desired_dir = (0f32, -1f32);
             self.should_change = true;
-        } else if down && self.direction.1 == 0f32 {
+        } else if keys.down && self.direction.1 == 0f32 {
             self.desired_dir = (0f32, 1f32);
             self.should_change = true;
         }
