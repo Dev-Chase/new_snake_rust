@@ -40,7 +40,6 @@ impl KeyStates {
         }
     }
 }
-//TODO: Add Unit Struct for Key States
 
 fn main() {
     let (mut rl, thread) = raylib::init().size(W, H).title("Better Snake Rust").build();
